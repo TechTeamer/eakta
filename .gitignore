@@ -1,0 +1,4 @@
+.idea
+yarn.lock
+test/files/
+!test/files/.gitignore
