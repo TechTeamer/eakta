@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<schema targetNamespace="https://www.microsec.hu/ds/e-szigno30#" xmlns:es="https://www.microsec.hu/ds/e-szigno30#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.2.2#" xmlns:mireg="http://mireg.org/schema/1.0/" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd"/>
+    <import namespace="http://uri.etsi.org/01903/v1.2.2#" schemaLocation="XAdES.xsd"/>
+    <import namespace="http://uri.etsi.org/01903/v1.3.2#" schemaLocation="XAdES-1.3.2.xsd"/>
+    <import namespace="http://mireg.org/schema/1.0/" schemaLocation="metadata.xsd"/>
+    <element name="Dossier">
+        <complexType>
+            <sequence>
+                <element name="DossierProfile">
+                    <complexType>
+                        <sequence>
+                            <element name="Title" type="string"/>
+                            <element name="E-category" minOccurs="0">
+                                <simpleType>
+                                    <restriction base="string">
+                                        <enumeration value="electronic dossier"/>
+                                        <enumeration value="electronic acknowledgement"/>
+                                        <enumeration value="elektronikus akta"/>
+                                        <enumeration value="elektronikus átvételi elismervény"/>
+                                    </restriction>
+                                </simpleType>
+                            </element>
+                            <element name="CreationDate" type="dateTime"/>
+                            <any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                        </sequence>
+                        <attribute name="Id" type="ID" use="required"/>
+                        <attribute name="OBJREF" type="string"/>
+                    </complexType>
+                </element>
+                <element name="Documents">
+                    <complexType>
+                        <sequence>
+                            <element ref="es:Document" minOccurs="0" maxOccurs="unbounded"/>
+                        </sequence>
+                        <attribute name="Id" use="required">
+                            <simpleType>
+                                <restriction base="ID">
+                                    <enumeration value="Object0"/>
+                                </restriction>
+                            </simpleType>
+                        </attribute>
+                    </complexType>
+                </element>
+                <choice minOccurs="0" maxOccurs="unbounded">
+                    <element ref="ds:Signature"/>
+                    <element name="TimeStamp" type="xades:TimeStampType"/>
+                </choice>
+            </sequence>
+            <attribute name="AckEmail">
+                <simpleType>
+                    <restriction base="string">
+                        <pattern value="([^@]+@[^\.]+\..+)?"/>
+                    </restriction>
+                </simpleType>
+            </attribute>
+            <attribute name="Location" type="string"/>
+        </complexType>
+    </element>
+    <element name="Document">
+        <complexType>
+            <sequence>
+                <element name="DocumentProfile">
+                    <complexType>
+                        <sequence>
+                            <element name="Title" type="string"/>
+                            <element name="E-category" minOccurs="0">
+                                <simpleType>
+                                    <restriction base="string">
+                                        <enumeration value="electronic data"/>
+                                        <enumeration value="electronic document"/>
+                                        <enumeration value="electronic record"/>
+                                        <enumeration value="elektronikus adat"/>
+                                        <enumeration value="elektronikus dokumentum"/>
+                                        <enumeration value="elektronikus irat"/>
+                                        <enumeration value="electronic profile"/>
+                                        <enumeration value="elektronikus adatlap"/>
+                                    </restriction>
+                                </simpleType>
+                            </element>
+                            <element name="CreationDate" type="dateTime"/>
+                            <element name="Format">
+                                <complexType>
+                                    <sequence>
+                                        <element name="MIME-Type">
+                                            <complexType>
+                                                <attribute name="type"/>
+                                                <attribute name="subtype"/>
+                                                <attribute name="extension"/>
+                                                <attribute name="charSet"/>
+                                            </complexType>
+                                        </element>
+                                    </sequence>
+                                </complexType>
+                            </element>
+                            <element name="UsedDispApplication" minOccurs="0">
+                                <complexType>
+                                    <attribute name="name"/>
+                                    <attribute name="version"/>
+                                </complexType>
+                            </element>
+                            <element name="MimeChecked" minOccurs="0">
+                                <complexType>
+                                    <simpleContent>
+                                        <extension base="boolean">
+                                            <attribute name="executed" type="boolean"/>
+                                        </extension>
+                                    </simpleContent>
+                                </complexType>
+                            </element>
+                            <element name="SourceLocation" type="string" minOccurs="0"/>
+                            <element name="SourceSize">
+                                <complexType>
+                                    <attribute name="sizeValue" type="integer"/>
+                                    <attribute name="sizeUnit" fixed="B"/>
+                                </complexType>
+                            </element>
+                            <element name="BaseTransform">
+                                <complexType>
+                                    <sequence maxOccurs="unbounded">
+                                        <element name="Transform">
+                                            <complexType>
+                                                <attribute name="Algorithm">
+                                                    <simpleType>
+                                                        <restriction base="string">
+                                                            <enumeration value="zip"/>
+                                                            <enumeration value="encrypt"/>
+                                                            <enumeration value="base64"/>
+                                                        </restriction>
+                                                    </simpleType>
+                                                </attribute>
+                                            </complexType>
+                                        </element>
+                                    </sequence>
+                                </complexType>
+                            </element>
+                            <element name="RecipientCertificateList" minOccurs="0">
+                                <complexType>
+                                    <sequence>
+                                        <element name="RecipientCertificate" maxOccurs="unbounded"/>
+                                    </sequence>
+                                </complexType>
+                            </element>
+                            <element name="Metadata" minOccurs="0">
+                                <complexType>
+                                    <sequence>
+                                        <element ref="mireg:metadata"/>
+                                    </sequence>
+                                    <attribute name="Custom" type="boolean" fixed="true"/>
+                                </complexType>
+                            </element>
+                        </sequence>
+                        <attribute name="Id" type="ID" use="required"/>
+                        <attribute name="OBJREF" type="string"/>
+                    </complexType>
+                </element>
+                <element ref="ds:Object"/>
+                <choice minOccurs="0" maxOccurs="unbounded">
+                    <element ref="ds:Signature"/>
+                    <element name="TimeStamp" type="xades:TimeStampType"/>
+                </choice>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="SignatureProfile">
+        <complexType>
+            <sequence>
+                <element name="SignerName" type="string"/>
+                <element name="SDPresented" minOccurs="0">
+                    <complexType>
+                        <simpleContent>
+                            <extension base="boolean">
+                                <attribute name="server" type="boolean"/>
+                            </extension>
+                        </simpleContent>
+                    </complexType>
+                </element>
+                <element name="Type">
+                    <simpleType>
+                        <restriction base="string">
+                            <enumeration value="signature"/>
+                            <enumeration value="countersignature"/>
+                            <enumeration value="aláírás"/>
+                            <enumeration value="ellenjegyzés"/>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="Generator">
+                    <complexType>
+                        <sequence>
+                            <element name="Program">
+                                <complexType>
+                                    <attribute name="name"/>
+                                    <attribute name="version"/>
+                                </complexType>
+                            </element>
+                            <element name="Device" minOccurs="0">
+                                <complexType>
+                                    <attribute name="name"/>
+                                    <attribute name="type"/>
+                                </complexType>
+                            </element>
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="Comment" minOccurs="0">
+                    <complexType mixed="true">
+                        <sequence>
+                            <element ref="es:Document" minOccurs="0"/>
+                        </sequence>
+                        <attribute name="Type">
+                            <simpleType>
+                                <restriction base="string">
+                                    <enumeration value="clause"/>
+                                    <enumeration value="gloss"/>
+                                    <enumeration value="comment"/>
+                                    <enumeration value="opinion"/>
+                                    <enumeration value="záradék"/>
+                                    <enumeration value="széljegyzet"/>
+                                    <enumeration value="megjegyzés"/>
+                                    <enumeration value="vélemény"/>
+                                </restriction>
+                            </simpleType>
+                        </attribute>
+                    </complexType>
+                </element>
+                <element name="SigPolChecked" type="boolean" minOccurs="0"/>
+                <element name="CustomData" minOccurs="0">
+                    <complexType>
+                        <sequence>
+                            <any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                        </sequence>
+                    </complexType>
+                </element>
+            </sequence>
+            <attribute name="Id" type="ID" use="required"/>
+            <attribute name="OBJREF" type="string"/>
+            <attribute name="SIGREF" type="string"/>
+            <attribute name="SIGREFLIST" type="string"/>
+        </complexType>
+    </element>
+    <element name="Metadata">
+        <complexType>
+            <sequence>
+                <element ref="mireg:metadata"/>
+            </sequence>
+            <attribute name="Custom" type="boolean" fixed="true"/>
+        </complexType>
+    </element>
+</schema>
