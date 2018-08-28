@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "eslint ."
+    "lint": "eslint .",
+    "test": "./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",

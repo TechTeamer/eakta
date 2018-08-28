@@ -36,12 +36,62 @@ const testFiles = [
         title: 'Ügyvéd által ellenjegyzett aláírás-minta - Bodnár Zsigmond'
       }
     ]
+  },
+  {
+    name: 'ill.igazolas',
+    expectedProperties: {
+      title: 'Mak.1035532017247420/illeték/15.000 Ft.',
+      creationDate: '2016-12-07T18:06:14Z',
+      category: 'elektronikus akta'
+    },
+    expectedDocuments: [
+      {
+        title: 'Illetékbefizetési igazolás'
+      }
+    ]
+  },
+  {
+    name: '161213_RentYourDeveloper Kft._valtozasbejegyzo vegzes',
+    expectedProperties: {
+      title: 'Cg.01-09-962028/29/végzés',
+      creationDate: '2016-12-13T14:17:14Z',
+      category: 'electronic dossier'
+    },
+    expectedDocuments: [
+      {
+        title: 'Változás bejegyzése'
+      },
+      {
+        title: 'A létesítő okirat - változásokkal egybefoglalt - hatályosított szövege'
+      }
+    ]
+  },
+  {
+    name: 'terti',
+    expectedProperties: {
+      title: 'Átvételi elismervény',
+      creationDate: '2018-04-25T08:11:09Z',
+      category: 'electronic acknowledgement'
+    },
+    expectedDocuments: [
+      {
+        title: 'acknowledgement.xml'
+      }
+    ]
+  },
+  {
+    name: 'TULLAP06052018080814323000-60117337389-117337414-3076765450697434536457534',
+    expectedProperties: {
+      title: 'tulajdoni lap',
+      creationDate: '2018-08-08T12:33:56Z',
+      category: 'electronic dossier'
+    },
+    expectedDocuments: [
+      {
+        title: 'tulajdoni lap'
+      }
+    ]
   }
-  // ,
-  // 'ill.igazolas': {},
-  // '161213_RentYourDeveloper Kft._valtozasbejegyzo vegzes': {},
-  // 'terti': {},
-  // 'TULLAP06052018080814323000-60117337389-117337414-3076765450697434536457534': {}
 ]
 
 describe(`Processing 'RentYourDeveloper Kft._beadas`, function () {
@@ -57,34 +107,50 @@ describe('Parsing test', function () {
   testFiles.forEach(function (test) {
     describe(`[${test.name}]`, function () {
       describe(`Properties`, function () {
-        it(`Title should be '${test.expectedProperties.title}'`, function () {
+        it(`Title should be '${test.expectedProperties.title}'`, function (done) {
           EAkta.createEAktaFromFile(`/workspace/eakta/test/files/${test.name}.es3`)
             .then(function (eakta) {
               assert.strictEqual(eakta.title, test.expectedProperties.title)
+            }).then(() => {
+              done()
+            }).catch((err) => {
+              done(err)
             })
         })
 
-        it(`Category should be '${test.expectedProperties.category}'`, function () {
+        it(`Category should be '${test.expectedProperties.category}'`, function (done) {
           EAkta.createEAktaFromFile(`/workspace/eakta/test/files/${test.name}.es3`)
             .then(function (eakta) {
               assert.strictEqual(eakta.category, test.expectedProperties.category)
+            }).then(() => {
+              done()
+            }).catch((err) => {
+              done(err)
             })
         })
 
-        it(`Creation Date should be '${test.expectedProperties.creationDate}'`, function () {
+        it(`Creation Date should be '${test.expectedProperties.creationDate}'`, function (done) {
           EAkta.createEAktaFromFile(`/workspace/eakta/test/files/${test.name}.es3`)
             .then(function (eakta) {
               assert.strictEqual(eakta.creationDate, test.expectedProperties.creationDate)
+            }).then(() => {
+              done()
+            }).catch((err) => {
+              done(err)
             })
         })
       })
 
       describe(`Documents`, function () {
         test.expectedDocuments.forEach(expectedDoc => {
-          it(`${expectedDoc.title}`, function () {
+          it(`${expectedDoc.title}`, function (done) {
             EAkta.createEAktaFromFile(`/workspace/eakta/test/files/${test.name}.es3`)
               .then(function (eakta) {
                 assert.ok(eakta.documents.has(expectedDoc.title))
+              }).then(() => {
+                done()
+              }).catch((err) => {
+                done(err)
               })
           })
         })
@@ -92,14 +158,3 @@ describe('Parsing test', function () {
     })
   })
 })
-
-/*
-let es3File = `./files/RentYourDeveloper Kft._beadas.es3`
-
-EAkta
-  .createEAktaFromFile(es3File)
-  .then((eakta) => {
-    return eakta.documents.forEach(doc => console.log(doc.title))
-  })
-  .catch((err) => { console.error(err) })
-*/
